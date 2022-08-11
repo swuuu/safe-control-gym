@@ -182,7 +182,13 @@ python3 no_controller/verbose_api.py --task cartpole --overrides no_controller/v
 - [`casadi`](https://github.com/casadi/casadi): symbolic framework for numeric optimization
 - [`safety-gym`](https://github.com/openai/safety-gym): environments for safe exploration in RL
 - [`realworldrl_suite`](https://github.com/google-research/realworldrl_suite): real-world RL challenge framework
-- [`gym-marl-reconnaissance`](https://github.com/JacopoPan/gym-marl-reconnaissance): multi-agent heterogeneous (UAV/UGV) environments
+- [`casadi`](https://github.com/casadi/casadi): symbolic framework for numeric optimization
+
+
+
+# Desiderata/WIP/Summer 2022 Internships TODOs
+- Publish to [PyPI](https://realpython.com/pypi-publish-python-package/)
+- Create resource list with [papers](https://www.semanticscholar.org/paper/safe-control-gym%3A-a-Unified-Benchmark-Suite-for-and-Yuan-Hall/66b4656ab7732dcdcf39c466e8ab948c2b4a042d#citingPapers), projects, blog posts (Cat's, etc.) using `safe-control-gym`
 
 -----
 > University of Toronto's [Dynamic Systems Lab](https://github.com/utiasDSL) / [Vector Institute for Artificial Intelligence](https://github.com/VectorInstitute)
