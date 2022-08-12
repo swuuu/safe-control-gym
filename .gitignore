@@ -6,6 +6,8 @@ examples/mpsc/unsafe_rl_temp_data/
 #
 examples/pid/*data/
 #
+experiments/pid/*data/
+#
 results/
 z_docstring.py
 TODOs.md
