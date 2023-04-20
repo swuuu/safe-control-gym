@@ -29,11 +29,11 @@ from safe_control_gym.math_and_models.normalization import BaseNormalizer, MeanS
 
 from safe_control_gym.controllers.base_controller import BaseController
 from safe_control_gym.controllers.ddpg.ddpg_utils import compute_returns_and_advantages,make_action_noise_process
-from safe_control_gym.controllers.safe_explorer.safe_explorer_utils import SafetyLayer, ConstraintBuffer
-from safe_control_gym.controllers.safe_explorer.safe_ddpg_utils import SafeDDPGAgent, SafeDDPGBuffer
+from safe_control_gym.controllers.safe_ddpg.safe_explorer_utils import SafetyLayer, ConstraintBuffer
+from safe_control_gym.controllers.safe_ddpg.safe_ddpg_utils import SafeDDPGAgent, SafeDDPGBuffer
 
 
-class DDPG(BaseController):
+class SafeExplorerDDPG(BaseController):
     """deep deterministic policy gradient."""
 
     def __init__(self,
@@ -72,7 +72,7 @@ class DDPG(BaseController):
                                         slack=self.constraint_slack)
         self.safety_layer.to(self.device)
         # agent
-        self.agent = DDPGAgent(self.env.observation_space,
+        self.agent = SafeDDPGAgent(self.env.observation_space,
                                self.env.action_space,
                                hidden_dim=self.hidden_dim,
                                gamma=self.gamma,
@@ -122,7 +122,7 @@ class DDPG(BaseController):
             obs, info = self.env.reset()
             self.obs = self.obs_normalizer(obs)
             self.c = np.array([inf["constraint_values"] for inf in info["n"]])
-            self.buffer = DDPGBuffer(self.env.observation_space, self.env.action_space, self.max_buffer_size,
+            self.buffer = SafeDDPGBuffer(self.env.observation_space, self.env.action_space, self.max_buffer_size,
                                      self.train_batch_size)
             # reset/initial noise process
             if self.noise_process:

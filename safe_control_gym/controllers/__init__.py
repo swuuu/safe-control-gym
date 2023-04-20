@@ -49,3 +49,19 @@ register(idx='rarl',
 register(idx='rap',
          entry_point='safe_control_gym.controllers.rarl.rap:RAP',
          config_entry_point='safe_control_gym.controllers.rarl:rap.yaml')
+
+register(id="safe_explorer_ppo",
+         entry_point="safe_control_gym.controllers.safe_explorer.safe_ppo:SafeExplorerPPO",
+         config_entry_point="safe_control_gym.controllers.safe_explorer:safe_ppo.yaml")
+
+register(id="rarl",
+         entry_point="safe_control_gym.controllers.rarl.rarl:RARL",
+         config_entry_point="safe_control_gym.controllers.rarl:rarl.yaml")
+
+register(id="rap",
+         entry_point="safe_control_gym.controllers.rarl.rap:RAP",
+         config_entry_point="safe_control_gym.controllers.rarl:rap.yaml")
+
+register(id="safe_explorer_ddpg",
+         entry_point="safe_control_gym.controllers.safe_ddpg.safe_ddpg:SafeExplorerDDPG",
+         config_entry_point="safe_control_gym.controllers.safe_ddpg:safe_ddpg.yaml")

@@ -211,7 +211,7 @@ class MLPActorCritic(nn.Module):
 #                   Storage
 # -----------------------------------------------------------------------------------
 
-class DDPGBuffer(SACBuffer):
+class SafeDDPGBuffer(SACBuffer):
     """Storage for replay buffer during training.
 
     Attributes:
