@@ -5,6 +5,19 @@ norm_reward: False
 clip_obs: 10.
 clip_reward: 10.
 
+# Safety layer args
+pretraining: True
+pretrained: null
+constraint_hidden_dim: 10
+constraint_lr: 0.0001
+constraint_batch_size: 256
+constraint_steps_per_epoch: 6000
+constraint_epochs: 25
+constraint_eval_steps: 1500
+constraint_eval_interval: 5
+constraint_buffer_size: 1000000
+constraint_slack: null
+
 # loss args
 gamma: 0.99
 tau: 0.005

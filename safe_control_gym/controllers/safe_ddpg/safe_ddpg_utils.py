@@ -266,7 +266,7 @@ def make_action_noise_process(noise_config, act_space):
 
     std_func = std_config.pop("func")
     std_args = std_config.pop("args")
-    std = eval(std_func)(*std_args, **std_config)
+    std = eval(std_func)(std_args, **std_config) # Todo: verify this change
 
     process = eval(process_func)(size=(act_space.shape[0],), std=std)
     return process
