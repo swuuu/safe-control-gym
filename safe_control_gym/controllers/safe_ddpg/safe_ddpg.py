@@ -28,9 +28,8 @@ from safe_control_gym.envs.env_wrappers.record_episode_statistics import RecordE
 from safe_control_gym.math_and_models.normalization import BaseNormalizer, MeanStdNormalizer, RewardStdNormalizer
 
 from safe_control_gym.controllers.base_controller import BaseController
-from safe_control_gym.controllers.ddpg.ddpg_utils import compute_returns_and_advantages,make_action_noise_process
 from safe_control_gym.controllers.safe_ddpg.safe_explorer_utils import SafetyLayer, ConstraintBuffer
-from safe_control_gym.controllers.safe_ddpg.safe_ddpg_utils import SafeDDPGAgent, SafeDDPGBuffer
+from safe_control_gym.controllers.safe_ddpg.safe_ddpg_utils import SafeDDPGAgent, SafeDDPGBuffer, make_action_noise_process
 
 
 class SafeExplorerDDPG(BaseController):
