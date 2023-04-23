@@ -150,3 +150,6 @@ dmypy.json
 
 # Pycharm
 ./idea/
+
+# ./walkthroughs/tutorial_models/tutorial_results/
+walkthroughs/tutorial_models/tutorial_results/

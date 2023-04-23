@@ -39,8 +39,11 @@ class SafeDDPGAgent:
         self.tau = tau
 
         # model
-        self.ac = MLPActorCritic(obs_space, act_space, hidden_dims=[
-                                 hidden_dim] * 2, activation="relu")
+        self.ac = MLPActorCritic(obs_space, 
+                                 act_space, 
+                                 hidden_dims=[hidden_dim] * 2,
+                                 activation="relu",
+                                 action_modifier=action_modifier)
 
         # target networks
         self.ac_targ = deepcopy(self.ac)

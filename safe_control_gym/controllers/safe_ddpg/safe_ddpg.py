@@ -77,7 +77,8 @@ class SafeExplorerDDPG(BaseController):
                                gamma=self.gamma,
                                tau=self.tau,
                                actor_lr=self.actor_lr,
-                               critic_lr=self.critic_lr)
+                               critic_lr=self.critic_lr,
+                               action_modifier=self.safety_layer.get_safe_action)
         self.agent.to(self.device)
 
         # pre-/post-processing
@@ -146,6 +147,7 @@ class SafeExplorerDDPG(BaseController):
 
         state_dict = {
             "agent": self.agent.state_dict(),
+            "safety_layer": self.safety_layer.state_dict(),
             "obs_normalizer": self.obs_normalizer.state_dict(),
             "reward_normalizer": self.reward_normalizer.state_dict()
         }

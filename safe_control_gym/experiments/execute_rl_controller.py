@@ -97,6 +97,8 @@ def test_policy(config):
                                 render=config.render,
                                 verbose=config.verbose,
                                 use_adv=config.use_adv)
+    print('########################################')
+    print(results)
     # Save evalution results.
     if config.eval_output_dir is not None and config.eval_output_dir:
         eval_output_dir = config.eval_output_dir
