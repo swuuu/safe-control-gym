@@ -267,7 +267,7 @@ class SafeExplorerDDPG(BaseController):
             with torch.no_grad():
                 obs = torch.FloatTensor(obs).to(self.device)
                 c = torch.FloatTensor(c).to(self.device)
-                action = self.agent.ac.act(obs)
+                action = self.agent.ac.act(obs, c=c)
 
             obs, reward, done, info = env.step(action)
             if render:
@@ -295,6 +295,7 @@ class SafeExplorerDDPG(BaseController):
             queued_stats = {k: np.asarray(v) for k, v in env.queued_stats.items()}
             eval_results.update(queued_stats)
         return eval_results
+
     def pretrain_step(self):
         """Performs a pre-trianing step.
 
@@ -328,7 +329,8 @@ class SafeExplorerDDPG(BaseController):
             act = np.stack([self.env.action_space.sample() for _ in range(self.rollout_batch_size)])
         else:
             with torch.no_grad():
-                act = self.agent.ac.act(torch.FloatTensor(obs).to(self.device))
+                act = self.agent.ac.act(torch.FloatTensor(obs).to(self.device), 
+                                        c=torch.FloatTensor(c).to(self.device))
                 # apply action noise if specified in training config
                 if self.noise_process:
                     noise = np.stack([self.noise_process.sample() for _ in range(self.rollout_batch_size)])
@@ -367,6 +369,7 @@ class SafeExplorerDDPG(BaseController):
             # "mask": mask,
             "next_obs": true_next_obs,
             "mask": true_mask,
+            "c": c
         })
         obs = next_obs
         c = np.array([inf["constraint_values"] for inf in info["n"]])

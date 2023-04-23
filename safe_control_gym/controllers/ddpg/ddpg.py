@@ -49,8 +49,8 @@ class DDPG(BaseController):
             self.eval_env = RecordEpisodeStatistics(self.eval_env, self.deque_size)
             # action noise for training
             self.noise_process = None
-            if self.random_process:
-                self.noise_process = make_action_noise_process(self.random_process, self.env.action_space)
+            # if self.random_process:
+            #     self.noise_process = make_action_noise_process(self.random_process, self.env.action_space)
         else:
             # testing only
             self.env = env_func()

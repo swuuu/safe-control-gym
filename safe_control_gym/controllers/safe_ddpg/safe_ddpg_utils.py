@@ -203,8 +203,8 @@ class MLPActorCritic(nn.Module):
         # Q functions
         self.q = MLPQFunction(obs_dim, act_dim, hidden_dims, activation)
 
-    def act(self, obs, **kwargs):
-        a = self.actor(obs)
+    def act(self, obs, c=None, **kwargs):
+        a = self.actor(obs, c=c)
         return a.cpu().numpy()
     
     # TODO: missing step function
