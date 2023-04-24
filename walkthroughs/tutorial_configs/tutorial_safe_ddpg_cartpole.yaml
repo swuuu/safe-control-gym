@@ -6,7 +6,9 @@ algo_config:
   eval_save_best: True 
   tensorboard: True
   constraint_slack: 0.1
-  pretraining: True
+  pretraining: False
+  pretrained: /home/molly/Projects/Research/safe-control-gym/walkthroughs/tutorial_models/tutorial_results/safe_ddpg/seed22_Apr-23-20-30-10_a08e640/model_latest.pt
+
 
 task_config:
   info_in_reset: True
@@ -17,3 +19,4 @@ task_config:
       constrained_variable: state
       active_dims: 0
   done_on_violation: True
+

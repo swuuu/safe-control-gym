@@ -36,7 +36,7 @@ actor_lr: 0.001
 critic_lr: 0.001
 
 # runner args
-max_env_steps: 1000000
+max_env_steps: 100000
 warm_up_steps: 10000
 rollout_batch_size: 4
 num_workers: 1

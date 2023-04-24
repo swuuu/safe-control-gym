@@ -93,11 +93,11 @@ class SafeDDPGAgent:
 
     def compute_q_loss(self, batch):
         """Returns q-value loss(es) given batch of data."""
-        obs, act, rew, next_obs, mask = batch["obs"], batch["act"], batch["rew"], batch["next_obs"], batch["mask"]
+        obs, act, rew, next_obs, mask, c = batch["obs"], batch["act"], batch["rew"], batch["next_obs"], batch["mask"],batch["c"]
         q = self.ac.q(obs, act)
 
         with torch.no_grad():
-            next_act = self.ac.actor(next_obs)
+            next_act = self.ac.actor(next_obs,c=c)
             next_q_targ = self.ac_targ.q(next_obs, next_act)
             # q value regression target
             q_targ = rew + self.gamma * mask * next_q_targ
@@ -250,7 +250,7 @@ class SafeDDPGBuffer(SACBuffer):
                 "init": np.ones
             },
             "c": {	
-                "vshape": (N, num_constraints) # TODO: not sure about this	
+                "vshape": (N, 1) # otherwise compile error
             }
         }
         self.keys = list(self.scheme.keys())
