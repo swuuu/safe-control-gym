@@ -7,8 +7,7 @@ algo_config:
   tensorboard: True
   constraint_slack: 0.1
   pretraining: False
-  pretrained: /home/stanleyzqwu/Documents/McGill/COMP579/final-project/safe-control-gym-fork/safe-control-gym/walkthroughs/tutorial_models/tutorial_results/safe_ppo/seed222_Apr-23-23-16-40_763dc3b/model_latest.pt
-
+  pretrained: /home/stanleyzqwu/Documents/McGill/COMP579/final-project/safe-control-gym-fork/safe-control-gym/walkthroughs/tutorial_models/tutorial_results/safe_ppo/seed222_Apr-23-23-16-40_763dc3b
 
 task_config:
   info_in_reset: True
@@ -19,4 +18,4 @@ task_config:
       constrained_variable: state
       active_dims: 0
   done_on_violation: True
-
+  gui: False

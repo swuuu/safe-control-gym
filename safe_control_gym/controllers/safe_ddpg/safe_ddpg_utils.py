@@ -12,6 +12,7 @@ from safe_control_gym.math_and_models.normalization import BaseNormalizer, MeanS
 from safe_control_gym.math_and_models.schedule import *
 from safe_control_gym.math_and_models.random_processes import *
 from safe_control_gym.controllers.sac.sac_utils import SACBuffer, soft_update
+import traceback
 
 
 # -----------------------------------------------------------------------------------
@@ -86,7 +87,7 @@ class SafeDDPGAgent:
     def compute_policy_loss(self, batch):
         """Returns policy loss(es) given batch of data."""
         obs, c = batch["obs"], batch["c"] # TODO: verify if this is correct
-        act = self.ac.actor(obs, c=c)
+        act = self.ac.actor(obs, c=None) # Safety layer is independent of policy!
         q = self.ac.q(obs, act)
         policy_loss = -q.mean()
         return policy_loss
@@ -97,7 +98,7 @@ class SafeDDPGAgent:
         q = self.ac.q(obs, act)
 
         with torch.no_grad():
-            next_act = self.ac.actor(next_obs,c=c)
+            next_act = self.ac.actor(next_obs,c=None) # Safety layer is independent of policy!
             next_q_targ = self.ac_targ.q(next_obs, next_act)
             # q value regression target
             q_targ = rew + self.gamma * mask * next_q_targ
@@ -151,18 +152,23 @@ class MLPActor(nn.Module):
     def forward(self, obs, c=None):
         action = self.net(obs)
         action = torch.tanh(action)
+        # print(f'action before = {action}')
         
-        if self.action_modifier:
+        if self.action_modifier and c is not None:
             if len(action.shape) == 1:
                 action_safe = self.action_modifier(obs.unsqueeze(0),
                                                    action.unsqueeze(0),
                                                    c.unsqueeze(0)).view(-1)
             else:
+                # for line in traceback.format_stack():
+                #     print(line.strip())
+                # print(action.shape)
                 action_safe = self.action_modifier(obs, action, c)
         else:
             action_safe = action
-        
+        # print(f'action after = {action_safe}')
         action = self.postprocess_fn(action_safe)
+        # print(f'action after postprocessing = {action}')
         return action
 
 
@@ -196,8 +202,11 @@ class MLPActorCritic(nn.Module):
         # Rescale action from [-1, 1] to [low, high]
         def unscale_fn(x): return low.to(x.device) + (0.5 *
                                                       (x + 1.0) * (high.to(x.device) - low.to(x.device)))
+        # self.actor = MLPActor(obs_dim, act_dim, hidden_dims,
+        #                       activation, postprocess_fn=unscale_fn, 
+        #                       action_modifier=action_modifier)
         self.actor = MLPActor(obs_dim, act_dim, hidden_dims,
-                              activation, postprocess_fn=unscale_fn, 
+                              activation, 
                               action_modifier=action_modifier)
 
         # Q functions
@@ -207,7 +216,7 @@ class MLPActorCritic(nn.Module):
         a = self.actor(obs, c=c)
         return a.cpu().numpy()
     
-    # TODO: missing step function
+    # TODO: missing step function (not sure if its needed)
 
 
 # -----------------------------------------------------------------------------------

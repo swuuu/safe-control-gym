@@ -54,8 +54,8 @@ class SafeExplorerDDPG(BaseController):
             self.eval_env = RecordEpisodeStatistics(self.eval_env, self.deque_size)
             # action noise for training
             self.noise_process = None
-            if self.random_process:
-                self.noise_process = make_action_noise_process(self.random_process, self.env.action_space)
+            # if self.random_process:
+            #     self.noise_process = make_action_noise_process(self.random_process, self.env.action_space)
             self.num_constraints = self.env.envs[0].num_constraints
         else:
             # testing only
@@ -322,12 +322,16 @@ class SafeExplorerDDPG(BaseController):
         self.agent.train()
         self.obs_normalizer.unset_read_only()
         obs = self.obs
+        # print('########################')
         c = self.c
+        # print(f'self.c = {self.c}')
         start = time.time()
 
         if self.total_steps < self.warm_up_steps:
+            # print(f'here 1!')
             act = np.stack([self.env.action_space.sample() for _ in range(self.rollout_batch_size)])
         else:
+            # print(f'here 2!') 
             with torch.no_grad():
                 act = self.agent.ac.act(torch.FloatTensor(obs).to(self.device), 
                                         c=torch.FloatTensor(c).to(self.device))
@@ -335,6 +339,8 @@ class SafeExplorerDDPG(BaseController):
                 if self.noise_process:
                     noise = np.stack([self.noise_process.sample() for _ in range(self.rollout_batch_size)])
                     act += noise
+                # act = torch.FloatTensor([[ 0.0222456 ], [-0.00372207], [-1.4033031 ], [ 0.3458963 ]])
+        # print(f'act = {act}')
         next_obs, rew, done, info = self.env.step(act)
 
         next_obs = self.obs_normalizer(next_obs)
