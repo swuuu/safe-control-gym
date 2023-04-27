@@ -87,7 +87,7 @@ class SafeDDPGAgent:
     def compute_policy_loss(self, batch):
         """Returns policy loss(es) given batch of data."""
         obs, c = batch["obs"], batch["c"] # TODO: verify if this is correct
-        act = self.ac.actor(obs, c=None) # Safety layer is independent of policy!
+        act = self.ac.actor(obs, c=c) # Safety layer is independent of policy!
         q = self.ac.q(obs, act)
         policy_loss = -q.mean()
         return policy_loss
@@ -150,8 +150,12 @@ class MLPActor(nn.Module):
         self.action_modifier = action_modifier
 
     def forward(self, obs, c=None):
+        # c=None # TODO: remove
+
         action = self.net(obs)
         action = torch.tanh(action)
+        action = self.postprocess_fn(action)
+        # print('##########################################')
         # print(f'action before = {action}')
         
         if self.action_modifier and c is not None:
@@ -159,16 +163,18 @@ class MLPActor(nn.Module):
                 action_safe = self.action_modifier(obs.unsqueeze(0),
                                                    action.unsqueeze(0),
                                                    c.unsqueeze(0)).view(-1)
-            else:
+                # print(f'action_safe 1 = {action_safe}')
+                # print('#####################################################')
                 # for line in traceback.format_stack():
                 #     print(line.strip())
                 # print(action.shape)
+            else:
                 action_safe = self.action_modifier(obs, action, c)
+                # print(f'action_safe 2 = {action_safe}')
         else:
             action_safe = action
-        # print(f'action after = {action_safe}')
-        action = self.postprocess_fn(action_safe)
-        # print(f'action after postprocessing = {action}')
+        action = action_safe
+        # print(f'action after = {action}')
         return action
 
 
@@ -233,7 +239,7 @@ class SafeDDPGBuffer(SACBuffer):
         keys (list): names of all data from scheme.
     """
 
-    def __init__(self, obs_space, act_space, num_constraints, max_size, batch_size=None):
+    def __init__(self, obs_space, act_space, max_size, batch_size=None):
         self.max_size = max_size
         self.batch_size = batch_size
 

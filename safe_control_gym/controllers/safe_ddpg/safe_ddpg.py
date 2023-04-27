@@ -339,7 +339,6 @@ class SafeExplorerDDPG(BaseController):
                 if self.noise_process:
                     noise = np.stack([self.noise_process.sample() for _ in range(self.rollout_batch_size)])
                     act += noise
-                # act = torch.FloatTensor([[ 0.0222456 ], [-0.00372207], [-1.4033031 ], [ 0.3458963 ]])
         # print(f'act = {act}')
         next_obs, rew, done, info = self.env.step(act)
 
